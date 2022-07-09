@@ -5,23 +5,25 @@
 #include "runtime/function/framework/component/component.h"
 #include "runtime/function/physics/physics_actor.h"
 
-namespace Pilot
+namespace Piccolo
 {
     REFLECTION_TYPE(RigidBodyComponent)
     CLASS(RigidBodyComponent : public Component, WhiteListFields)
     {
         REFLECTION_BODY(RigidBodyComponent)
     public:
+        RigidBodyComponent() = default;
+        ~RigidBodyComponent() override;
+
+        void postLoadResource(std::weak_ptr<GObject> parent_object) override;
+
+        void tick(float delta_time) override {}
+        void updateGlobalTransform(const Transform& transform);
+
+    protected:
         META(Enable)
         RigidBodyComponentRes m_rigidbody_res;
 
         PhysicsActor* m_physics_actor {nullptr};
-
-        RigidBodyComponent() {}
-        RigidBodyComponent(const RigidBodyComponentRes& rigidbody_res, GObject* parent_object);
-        ~RigidBodyComponent() override;
-
-        void tick(float delta_time) override {}
-        void updateGlobalTransform(const Transform& transform);
     };
-} // namespace Pilot
+} // namespace Piccolo
