@@ -17,6 +17,37 @@ namespace Pilot
             desired_position = current_position;
         }
 
+<<<<<<< Updated upstream
         return desired_position;
+=======
+        hits.clear();
+
+        // side pass
+        if (physics_scene->sweep(
+            m_rigidbody_shape,
+            world_transform.getMatrix(),
+            horizontal_direction,
+            horizontal_direction.length() * 0.1f,
+            hits))
+        {
+            Vector3 hit_tangent_1 = Vector3(hits[0].hit_normal.y, -hits[0].hit_normal.x, 0.f);
+            Vector3 hit_tangent_2 = Vector3(-hits[0].hit_normal.y, hits[0].hit_normal.x, 0.f);
+            Vector3 hit_tangent   = hit_tangent_1;
+
+            if (hit_tangent_1.angleBetween(horizontal_direction) > hit_tangent_2.angleBetween(horizontal_direction))
+            {
+                hit_tangent = hit_tangent_2;
+            }
+            final_position += hits[0].hit_distance * hit_tangent * 0.1f; 
+        }
+        else
+        {
+            final_position += horizontal_displacement;
+        }
+
+        hits.clear();
+
+        return final_position;
+>>>>>>> Stashed changes
     }
 } // namespace Pilot
